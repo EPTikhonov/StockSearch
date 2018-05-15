@@ -4,7 +4,7 @@ public class StockSearch_SimpleTester {
 
 	public static void main(String[] args) throws IOException {
 
-		StockSearch_Data application = new StockSearch_Data();
+		new StockSearch_Data();
 
 	}
 
