@@ -159,8 +159,10 @@ public class StockSearch_Data {
 			}
 			String temp = line.substring(start + 2, decimal - 1);
 			String closed = "Close";
+			String previousClose = "Previous close";
+			
 			// if market closed then set to "Market Closed"
-			if (temp.equals(closed)) {
+			if (temp.equals(closed) || temp.equals(previousClose)) {
 				time = "Market Closed";
 				return time;
 			}
