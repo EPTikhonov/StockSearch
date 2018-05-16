@@ -1,74 +1,38 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.RoundingMode;
 import java.net.URL;
-import java.util.Scanner;
-
+import java.text.DecimalFormat;
 import javax.net.ssl.HttpsURLConnection;
 
 public class StockSearch_Data {
 
-	private Scanner input = new Scanner(System.in);
-	private String symbolInput = "ticker was not found";
-	private String terminateValue = "exit"; // value that ends the program if entered as input
+	String time = "";
+	String companyName = "";
+	String lastPrice = "";
+	String high = "";
+	String low = "";
+	String marketCap = "";
+	String peRatio = "";
+	String change = "";
+	String stockChangeAsPercentage = "";
+	String stockLogoURL = "";
 
-	private String time = "time not found";
-	private String companyName = "company not found";
-	private String lastPrice = "not found";
-	private String high = "not found";
-	private String low = "not found";
-	private String marketCap = "not found";
-	private String peRatio = "not found";
-	private String change = "not found";
-	private double stockChangeAsPercentage = 0.0;
-	private String stockLogoURL = "not found";
+	final String DOW_TICKER = "DIA";
+	final String SANDP500_TICKER = "SPY";
+	final String RUSSELL2000_TICKER = "IWM";
+	String dowJonesPercentChange = "";
+	String standardAndPoorsPercentChange = "";
+	String russell2000PercentChange = "";
+	String indexChangeAsPercentage = "";
+	DecimalFormat decimalForm = new DecimalFormat("#.##");
 
+	public StockSearch_Data() {
 
-	private final String DOW_TICKER = "DIA";
-	private final String SANDP500_TICKER = "SPY";
-	private final String RUSSELL2000_TICKER = "IWM";
-	private double dowJonesPercentChange = 0.0;
-	private double standardAndPoorsPercentChange = 0.0;
-	private double russell2000PercentChange = 0.0;
-	private double indexChangeAsPercentage = 0.0;
-
-	// when class is initialized, methods inside are run automatically
-	public StockSearch_Data() throws IOException {
-		System.out.println("Enter \"" + terminateValue + "\" to end StockSearch!\n");
-		while (true) {
-			// getting input and terminates the program if terminateValue is entered
-			getTickerInput();
-			if (symbolInput.equals(terminateValue)) {
-				break;
-			} else {
-
-				try {
-					// getting individual stock information from input
-					connectStockToAPI(getTickerURL(symbolInput));
-					printIndividualStockInfo();
-
-					// getting information of indexes
-					getIndexInfo();
-					printIndexesInfo();
-				} catch (IOException e ) {
-					//System.out.println("Exception: " + e);
-					System.out.println(symbolInput + " was not found\n");
-				}
-
-			}
-		}
 	}
 
-	// get stock symbol/ticker from input
-	public String getTickerInput() {
-		System.out.print("Enter ticker: ");
-		String ticker = input.nextLine();
-		symbolInput = ticker;
-
-		return ticker;
-	}
-
-	// get stock url for connection to API
+	// get stock/index url for connection to API
 	public String getTickerURL(String symbolInput) {
 		String tickerURL = "https://api.iextrading.com/1.0/stock/"+symbolInput+"/batch?types=quote";
 
@@ -77,52 +41,60 @@ public class StockSearch_Data {
 
 	// connecting stock ticker to IEXTrading API and getting information
 	public void connectStockToAPI(String urlLink) throws IOException {
-		URL url = new URL(urlLink);
-		HttpsURLConnection urlConn = (HttpsURLConnection) url.openConnection();
-		urlConn.setRequestMethod("GET");
-		InputStreamReader inStream = new InputStreamReader(urlConn.getInputStream());
-		BufferedReader buff = new BufferedReader(inStream);
-		String line = buff.readLine();
+		try {
+			URL url = new URL(urlLink);
+			HttpsURLConnection urlConn = (HttpsURLConnection) url.openConnection();
+			urlConn.setRequestMethod("GET");
+			InputStreamReader inStream = new InputStreamReader(urlConn.getInputStream());
+			BufferedReader buff = new BufferedReader(inStream);
+			String line = buff.readLine();
 
-		while(line != null) {
-			getCurrentTime(line);
-			getMarketStatus(line);
-			getCompanyName(line);
-			getLastPrice(line);
-			getStockLogo();
-			getChange(line);
-			getStockChangeAsPercentage(line);
-			getHighPrice(line);
-			getLowPrice(line);
-			getMarketCap(line);
-			getPERatio(line);
+			while(line != null) {
+				getCurrentTime(line);
+				getMarketStatus(line);
+				getCompanyName(line);
+				getLastPrice(line);
+				//getStockLogo();
+				getChange(line);
+				getStockChangeAsPercentage(line);
+				getHighPrice(line);
+				getLowPrice(line);
+				getMarketCap(line);
+				getPERatio(line);
 
-			//System.out.println(line); // prints entire stock info
-			line = buff.readLine();
+				//System.out.println(line); // prints entire stock info
+				line = buff.readLine();
+			}
+			inStream.close();
+			urlConn.disconnect();
+
+		} catch (IOException e) {
+			System.out.println("ticker symbol was not found");
 		}
-		inStream.close();
-		urlConn.disconnect();
-
 	}
 
 	// connecting index ticker to IEXTrading API and getting information
-	public double connectIndexToAPI(String urlLink) throws IOException {
-		URL url = new URL(urlLink);
-		HttpsURLConnection urlConn = (HttpsURLConnection) url.openConnection();
-		urlConn.setRequestMethod("GET");
-		InputStreamReader inStream = new InputStreamReader(urlConn.getInputStream());
-		BufferedReader buff = new BufferedReader(inStream);
-		String line = buff.readLine();
-		double tempChangePercentage = 0.0;
+	public String connectIndexToAPI(String urlLink) throws IOException {
+		String tempChangePercentage = "";
+		try {
+			URL url = new URL(urlLink);
+			HttpsURLConnection urlConn = (HttpsURLConnection) url.openConnection();
+			urlConn.setRequestMethod("GET");
+			InputStreamReader inStream = new InputStreamReader(urlConn.getInputStream());
+			BufferedReader buff = new BufferedReader(inStream);
+			String line = buff.readLine();
 
-		while(line != null) {
-			tempChangePercentage = getIndexChangeAsPercentage(line);
+			while(line != null) {
+				tempChangePercentage = getIndexChangeAsPercentage(line);
 
-			//System.out.println(line); // prints entire stock info
-			line = buff.readLine();
+				//System.out.println(line); // prints entire stock info
+				line = buff.readLine();
+			}
+			inStream.close();
+			urlConn.disconnect();
+		} catch (IOException e) {
+			System.out.println("indexes were not found");
 		}
-		inStream.close();
-		urlConn.disconnect();
 
 		return tempChangePercentage;
 	}
@@ -160,7 +132,7 @@ public class StockSearch_Data {
 			String temp = line.substring(start + 2, decimal - 1);
 			String closed = "Close";
 			String previousClose = "Previous close";
-			
+
 			// if market closed then set to "Market Closed"
 			if (temp.equals(closed) || temp.equals(previousClose)) {
 				time = "Market Closed";
@@ -183,10 +155,6 @@ public class StockSearch_Data {
 		}
 	}
 
-	// getting stock logo URL
-	public void getStockLogo() {
-		stockLogoURL = "https://storage.googleapis.com/iex/api/logos/"+symbolInput+".png";
-	}
 
 	// getting last price
 	public void getLastPrice(String line) {
@@ -216,6 +184,7 @@ public class StockSearch_Data {
 
 	// getting stock change as percent
 	public void getStockChangeAsPercentage(String line) {
+		decimalForm.setRoundingMode(RoundingMode.FLOOR);
 		if (line.contains("\"changePercent\"")) {
 			int target = line.indexOf("\"changePercent\"");
 			int decimal = line.indexOf(",", target);
@@ -224,13 +193,15 @@ public class StockSearch_Data {
 				start--;
 			}
 			String temp = line.substring(start + 1, decimal);
-			stockChangeAsPercentage = Double.parseDouble(temp) * 100;
+			stockChangeAsPercentage = decimalForm.format(Double.parseDouble(temp) * 100);
 		}
 	}
 
 	// getting index change as percent
-	public double getIndexChangeAsPercentage(String line) {
+	public String getIndexChangeAsPercentage(String line) {
+		decimalForm.setRoundingMode(RoundingMode.FLOOR);
 		if (line.contains("\"changePercent\"")) {
+			//indexChangeAsPercentage = "";
 			int target = line.indexOf("\"changePercent\"");
 			int decimal = line.indexOf(",", target);
 			int start = decimal;
@@ -238,7 +209,7 @@ public class StockSearch_Data {
 				start--;
 			}
 			String temp = line.substring(start + 1, decimal);
-			indexChangeAsPercentage = Double.parseDouble(temp) * 100;
+			indexChangeAsPercentage = decimalForm.format(Double.parseDouble(temp) * 100);
 		}
 		return indexChangeAsPercentage;
 	}
@@ -325,30 +296,4 @@ public class StockSearch_Data {
 		}
 	}
 
-	// setting stock logo URL
-	public void setStockLogo(String ticker) {
-		stockLogoURL = "https://storage.googleapis.com/iex/api/logos/"+ticker+".png";
-	}
-
-	// printing individual stock information
-	public void printIndividualStockInfo() {
-		System.out.println(time);
-		System.out.println(companyName);
-		System.out.println("Last Price: " + lastPrice);
-		System.out.printf("Change: %s (%.3f%%)\n",change, stockChangeAsPercentage);
-		System.out.println("High: " + high);
-		System.out.println("Low: " + low);
-		System.out.println("Market Cap: " + marketCap);
-		System.out.println("P/E Ratio: " + peRatio);
-		System.out.println("Stock Logo: " + stockLogoURL);
-	}
-
-	// printing index information (Dow, S&P 500, and Russell 2000)
-	public void printIndexesInfo() {
-		System.out.println("\n-----{ INDEXES }-----");
-		System.out.printf("Dow: %.2f%%\n", dowJonesPercentChange);
-		System.out.printf("S&P 500: %.2f%%\n", standardAndPoorsPercentChange);
-		System.out.printf("Russell 2000: %.2f%%\n", russell2000PercentChange);
-		System.out.println("---------------------\n");
-	}
 }
