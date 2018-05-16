@@ -54,7 +54,7 @@ public class StockSearch_Display  {
 
 		JLabel lblDow = new JLabel("");
 		lblDow.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDow.setBounds(67, 222, 40, 20);
+		lblDow.setBounds(56, 222, 51, 20);
 		frame.getContentPane().add(lblDow);
 
 		JLabel lblSp = new JLabel("");
@@ -69,22 +69,22 @@ public class StockSearch_Display  {
 
 		JLabel lblHigh = new JLabel(data.high);
 		lblHigh.setHorizontalAlignment(SwingConstants.CENTER);
-		lblHigh.setBounds(103, 126, 46, 16);
+		lblHigh.setBounds(103, 123, 77, 19);
 		frame.getContentPane().add(lblHigh);
 
 		JLabel lblLow = new JLabel(data.low);
 		lblLow.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLow.setBounds(103, 157, 46, 16);
+		lblLow.setBounds(103, 150, 77, 23);
 		frame.getContentPane().add(lblLow);
 
 		JLabel lblMarketCap = new JLabel(data.marketCap);
 		lblMarketCap.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMarketCap.setBounds(295, 126, 67, 16);
+		lblMarketCap.setBounds(295, 123, 77, 23);
 		frame.getContentPane().add(lblMarketCap);
 
 		JLabel lblPeRatio = new JLabel(data.peRatio);
 		lblPeRatio.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPeRatio.setBounds(295, 157, 57, 16);
+		lblPeRatio.setBounds(295, 150, 77, 23);
 		frame.getContentPane().add(lblPeRatio);
 
 		JLabel lblChange = new JLabel(data.change);
@@ -94,7 +94,7 @@ public class StockSearch_Display  {
 
 		JLabel lblChangepercentage = new JLabel("");
 		lblChangepercentage.setHorizontalAlignment(SwingConstants.CENTER);
-		lblChangepercentage.setBounds(167, 85, 57, 14);
+		lblChangepercentage.setBounds(173, 85, 57, 14);
 		frame.getContentPane().add(lblChangepercentage);
 
 		txtEnterTickerSymbol.addActionListener(new ActionListener() {
