@@ -79,7 +79,7 @@ public class StockSearch_Display  {
 
 		JLabel lblMarketCap = new JLabel(data.marketCap);
 		lblMarketCap.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMarketCap.setBounds(295, 123, 77, 23);
+		lblMarketCap.setBounds(295, 119, 77, 23);
 		frame.getContentPane().add(lblMarketCap);
 
 		JLabel lblPeRatio = new JLabel(data.peRatio);
