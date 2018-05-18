@@ -54,7 +54,6 @@ public class StockSearch_Data {
 				getMarketStatus(line);
 				getCompanyName(line);
 				getLastPrice(line);
-				//getStockLogo();
 				getChange(line);
 				getStockChangeAsPercentage(line);
 				getHighPrice(line);
@@ -136,7 +135,6 @@ public class StockSearch_Data {
 			// if market closed then set to "Market Closed"
 			if (temp.equals(closed) || temp.equals(previousClose)) {
 				time = "Market Closed";
-				return time;
 			}
 		}
 		return time;

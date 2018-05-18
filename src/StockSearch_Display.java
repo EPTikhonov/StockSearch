@@ -49,7 +49,7 @@ public class StockSearch_Display  {
 
 		JLabel lblLastPrice = new JLabel(data.lastPrice);
 		lblLastPrice.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblLastPrice.setBounds(67, 85, 65, 14);
+		lblLastPrice.setBounds(67, 85, 77, 14);
 		frame.getContentPane().add(lblLastPrice);
 
 		JLabel lblDow = new JLabel("");
@@ -108,21 +108,42 @@ public class StockSearch_Display  {
 
 					// getting information of indexes
 					data.getIndexInfo();
-
-					// setting values
-					lblTime.setText(data.time);
-					lblNewLabel.setText(data.companyName);
-					lblLastPrice.setText(data.lastPrice);
-					lblDow.setText(data.dowJonesPercentChange+"%");
-					lblSp.setText(data.standardAndPoorsPercentChange+"%");
-					lblRussell.setText(data.russell2000PercentChange+"%");
-					lblHigh.setText(data.high);
-					lblLow.setText(data.low);
-					lblMarketCap.setText(data.marketCap);
-					lblPeRatio.setText(data.peRatio);
-					lblChange.setText(data.change);
-					lblChangepercentage.setText("("+data.stockChangeAsPercentage+"%)");
-
+					
+					// high and low from the day before could be null before market opens
+					if (data.high.equals("null") || data.low.equals("null")) {
+						data.high = "closed";
+						data.low = "closed";
+					}
+					
+					// setting values based on if market is closed
+					if (data.time.equals("Market Closed")) {
+						lblChange.setText("closed");
+						lblChangepercentage.setText("closed");
+						lblDow.setText("closed");
+						lblSp.setText("closed");
+						lblRussell.setText("closed");
+						
+						lblTime.setText(data.time);
+						lblNewLabel.setText(data.companyName);
+						lblLastPrice.setText(data.lastPrice);
+						lblHigh.setText(data.high);
+						lblLow.setText(data.low);
+						lblMarketCap.setText(data.marketCap);
+						lblPeRatio.setText(data.peRatio);
+					} else {
+						lblTime.setText(data.time);
+						lblNewLabel.setText(data.companyName);
+						lblLastPrice.setText(data.lastPrice);
+						lblDow.setText(data.dowJonesPercentChange+"%");
+						lblSp.setText(data.standardAndPoorsPercentChange+"%");
+						lblRussell.setText(data.russell2000PercentChange+"%");
+						lblHigh.setText(data.high);
+						lblLow.setText(data.low);
+						lblMarketCap.setText(data.marketCap);
+						lblPeRatio.setText(data.peRatio);
+						lblChange.setText(data.change);
+						lblChangepercentage.setText("("+data.stockChangeAsPercentage+"%)");
+					}
 				} catch (IOException c) {
 					c.printStackTrace();
 				}
@@ -172,9 +193,9 @@ public class StockSearch_Display  {
 		frame.getContentPane().add(txtpnRussell);
 
 		JTextPane txtpnIndexes = new JTextPane();
-		txtpnIndexes.setText("INDEXES");
+		txtpnIndexes.setText("INDEXES (daily change %)");
 		txtpnIndexes.setFont(new Font("Tahoma", Font.BOLD, 11));
-		txtpnIndexes.setBounds(186, 183, 57, 20);
+		txtpnIndexes.setBounds(143, 183, 158, 20);
 		frame.getContentPane().add(txtpnIndexes);
 
 	}
