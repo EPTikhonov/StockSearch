@@ -7,7 +7,7 @@ Searches a stock's information through a stock ticker's symbol using the IEX Tra
     Download and run StockSearch.exe or StockSearch.jar
     StockSearch requires Java (JRE) 1.8+ to run.
     
-<a href="#"><img src="https://github.com/EPTikhonov/StockSearch/blob/GUI/StockSearchDemo.gif" title="TravelCalc"/></a>
+<a href="#"><img src="https://github.com/EPTikhonov/StockSearch/blob/GUI/StockSearchDemo.gif" title="StockSearch"/></a>
 
 ## License & Copyright
 
